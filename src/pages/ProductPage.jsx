@@ -76,16 +76,22 @@ export default function ProductPage() {
         <p style={{ fontSize: 18, color: c.textSec, lineHeight: 1.7, marginBottom: 40 }}>
           {product.description}
         </p>
-        <a
-          href={product.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: c.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, textDecoration: 'none', letterSpacing: '-0.01em', transition: 'background 0.2s' }}
-          onMouseEnter={e => (e.currentTarget.style.background = c.accentHover)}
-          onMouseLeave={e => (e.currentTarget.style.background = c.accent)}
-        >
-          Launch App ↗
-        </a>
+        {product.comingSoon ? (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'transparent', color: c.textMuted, fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, border: `1px dashed ${c.border}`, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Coming Soon
+          </span>
+        ) : (
+          <a
+            href={product.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: c.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, textDecoration: 'none', letterSpacing: '-0.01em', transition: 'background 0.2s' }}
+            onMouseEnter={e => (e.currentTarget.style.background = c.accentHover)}
+            onMouseLeave={e => (e.currentTarget.style.background = c.accent)}
+          >
+            Launch App ↗
+          </a>
+        )}
       </section>
 
       {/* FEATURES */}

@@ -146,7 +146,7 @@ function SocialLink({ label, href, Icon, c }) {
 
 const CAREER = [
   {
-    period: '2024 – Now',
+    period: '2024 – 2026',
     company: 'ALFAN',
     role: 'Lead Engineer',
     location: 'Dubai · Remote',
@@ -360,6 +360,7 @@ export default function Home() {
             {products.map((product) => (
               <ProductCard key={product.slug} product={product} c={c} />
             ))}
+            <IdeaCard c={c} />
           </div>
         </div>
       </section>
@@ -421,6 +422,58 @@ export default function Home() {
 function ProductCard({ product, c }) {
   const [hovered, setHovered] = useState(false)
 
+  if (product.comingSoon) {
+    return (
+      <div
+        style={{
+          height: '100%',
+          padding: '32px',
+          background: c.surface,
+          border: `1px dashed ${c.border}`,
+          borderRadius: 20,
+          textAlign: 'left',
+          opacity: 0.85,
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+          <h3 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em', color: c.text }}>{product.name}</h3>
+          <span style={{
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: 9,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: c.accent,
+            border: `1px solid ${c.accent}`,
+            borderRadius: 100,
+            padding: '3px 10px',
+            opacity: 0.8,
+          }}>
+            coming soon
+          </span>
+        </div>
+        <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: c.accent, fontFamily: 'JetBrains Mono, monospace', marginBottom: 16 }}>
+          {product.tagline}
+        </p>
+        <p style={{ fontSize: 14, color: c.textSec, lineHeight: 1.6, marginBottom: 24 }}>
+          {product.description}
+        </p>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {product.features.slice(0, 2).map((f, i) => (
+            <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: c.textMuted }}>
+              <span style={{ color: c.green, marginTop: 1, flexShrink: 0 }}>→</span>
+              <span>{f.title}</span>
+            </li>
+          ))}
+        </ul>
+        <div style={{ borderTop: `1px solid ${c.borderSubtle}`, marginTop: 28, paddingTop: 20 }}>
+          <span style={{ fontSize: 11, color: c.textDim, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            in the works
+          </span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Link to={`/product/${product.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
       <div
@@ -461,5 +514,58 @@ function ProductCard({ product, c }) {
         </div>
       </div>
     </Link>
+  )
+}
+
+// ── Idea Card ───────────────────────────────────────────────────────────────
+
+function IdeaCard({ c }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <a
+      href="mailto:rockeykotwal1995@gmail.com?subject=Product Idea&body=Hey Rockey, here's an idea I think you should build:"
+      style={{ textDecoration: 'none', display: 'block' }}
+    >
+      <div
+        style={{
+          height: '100%',
+          padding: '32px',
+          background: hovered ? c.surfaceHover : 'transparent',
+          border: `1px dashed ${hovered ? c.borderAccent : c.borderSubtle}`,
+          borderRadius: 20,
+          textAlign: 'left',
+          transition: 'background 0.2s, border-color 0.2s',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          minHeight: 220,
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <span style={{
+          fontFamily: 'JetBrains Mono, monospace',
+          fontSize: 32,
+          color: hovered ? c.accent : c.textDim,
+          transition: 'color 0.2s',
+          display: 'block',
+          marginBottom: 16,
+        }}>
+          ✦
+        </span>
+        <h3 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', color: c.text, marginBottom: 10 }}>
+          Got an idea?
+        </h3>
+        <p style={{ fontSize: 14, color: c.textSec, lineHeight: 1.6, marginBottom: 24 }}>
+          If there's something you'd love to see built — a tool, a fix, a product — pitch it. I read every message.
+        </p>
+        <div style={{ borderTop: `1px solid ${c.borderSubtle}`, paddingTop: 20 }}>
+          <span style={{ fontSize: 11, color: hovered ? c.accent : c.textMuted, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em', textTransform: 'uppercase', transition: 'color 0.2s' }}>
+            send idea ↗
+          </span>
+        </div>
+      </div>
+    </a>
   )
 }
