@@ -25,6 +25,32 @@ export const products = [
     ],
   },
   {
+    slug: 'agentic-ai',
+    name: 'Agentic AI',
+    tagline: 'Web-based autonomous AI agents',
+    description:
+      'A web-based platform for building and running autonomous AI agents. Define goals, let agents browse, reason, and act — without babysitting every step.',
+    url: null,
+    comingSoon: true,
+    features: [
+      {
+        title: 'Goal-driven web agents',
+        description:
+          'Describe an outcome in plain language — the agent plans and executes multi-step tasks across the web autonomously.',
+      },
+      {
+        title: 'Live agent canvas',
+        description:
+          'Watch agents think and act in real time on a visual canvas. Inspect every decision, tool call, and result as it happens.',
+      },
+      {
+        title: 'No-code + code',
+        description:
+          'Build workflows visually or drop into code at any node — designed for engineers who want both flexibility and speed.',
+      },
+    ],
+  },
+  {
     slug: 'upcheck',
     name: 'UpCheck',
     tagline: 'Know about outages before your users do',
