@@ -1,0 +1,1 @@
+Stage all modified and new project files, write a concise commit message based on what changed, commit as Rockey Kotwal, and push to the current branch. Do not add Co-Authored-By or any other trailer to the commit.
