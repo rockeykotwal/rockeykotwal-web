@@ -289,14 +289,6 @@ export default function Home() {
             Hands-on backend engineer who loves a good challenge. I build systems that turn ideas into real, working results.
           </p>
 
-          {/* Stats */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 0 }}>
-            <StatPill value="9+" label="Years" c={c} />
-            <div style={{ borderLeft: `1px solid ${c.borderSubtle}`, margin: '0 40px' }} />
-            <StatPill value="$1.25M" label="ARR Built" c={c} />
-            <div style={{ borderLeft: `1px solid ${c.borderSubtle}`, margin: '0 40px' }} />
-            <StatPill value="2" label="Products" c={c} />
-          </div>
         </div>
 
         {/* Scroll hint */}
