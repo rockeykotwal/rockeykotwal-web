@@ -149,24 +149,28 @@ const CAREER = [
     period: '2024 – Now',
     company: 'ALFAN',
     role: 'Lead Engineer',
+    location: 'Dubai · Remote',
     highlight: '10K → 120K+ creators in 18 months · leads 3-engineer squad · CI/CD & Terraform IaC',
   },
   {
     period: '2022 – 2024',
     company: 'ALFAN',
     role: 'Senior Software Engineer',
+    location: 'Dubai · Remote',
     highlight: '$1.25M ARR payment system · multi-currency digital wallet · 1K+ daily transactions · −8% txn failures',
   },
   {
     period: '2020 – 2022',
     company: 'Covideo / Droplr',
     role: 'Senior Software Engineer',
+    location: 'USA · Remote',
     highlight: '2M+ shareable links · serverless video encoding pipeline · −40% API latency · Stripe billing',
   },
   {
     period: '2017 – 2020',
     company: 'Jungleworks',
     role: 'Software Engineer',
+    location: 'India · On-site',
     highlight: 'Payment workflows on Checkout.com · proximity-based fleet auto-assignment · on-demand logistics APIs',
   },
 ]
@@ -192,6 +196,7 @@ function CareerTimeline({ c }) {
               {item.company}
               <span style={{ fontWeight: 400, color: c.textSec, fontSize: 13 }}> · {item.role}</span>
             </p>
+            <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: c.textMuted, marginBottom: 4 }}>{item.location}</p>
             <p style={{ fontSize: 13, color: c.textSec, lineHeight: 1.5 }}>{item.highlight}</p>
           </div>
         </div>
