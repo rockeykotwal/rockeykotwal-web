@@ -89,21 +89,6 @@ function TopoBg({ c }) {
   )
 }
 
-// ── Stat Pill ──────────────────────────────────────────────────────────────
-
-function StatPill({ value, label, c }) {
-  return (
-    <div style={{ textAlign: 'center' }}>
-      <p style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-0.04em', color: c.text, lineHeight: 1 }}>
-        {value}<span style={{ color: c.accent }}>.</span>
-      </p>
-      <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.25em', color: c.textMuted, fontFamily: 'JetBrains Mono, monospace', marginTop: 6 }}>
-        {label}
-      </p>
-    </div>
-  )
-}
-
 // ── Social Link ────────────────────────────────────────────────────────────
 
 const SOCIAL = [
