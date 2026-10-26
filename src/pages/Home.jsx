@@ -122,6 +122,7 @@ function SocialLink({ label, href, Icon, c }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackEvent('social_click', { platform: label.toLowerCase() })}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -207,11 +208,29 @@ function CareerTimeline({ c }) {
 
 // ── Main Component ─────────────────────────────────────────────────────────
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../analytics.js'
 
 export default function Home() {
   const { theme, toggleTheme } = useTheme()
   const c = themes[theme]
+
+  useEffect(() => {
+    const milestones = new Set()
+    const onScroll = () => {
+      const scrolled = window.scrollY + window.innerHeight
+      const total = document.documentElement.scrollHeight
+      const pct = Math.round((scrolled / total) * 100)
+      for (const depth of [25, 50, 75, 100]) {
+        if (pct >= depth && !milestones.has(depth)) {
+          milestones.add(depth)
+          trackEvent('scroll_depth', { depth })
+        }
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <div style={{ minHeight: '100vh', background: c.bg, color: c.text, fontFamily: 'Inter, system-ui, sans-serif', transition: 'background 0.3s, color 0.3s' }}>
@@ -228,12 +247,13 @@ export default function Home() {
             style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: c.textMuted, textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace', transition: 'color 0.2s' }}
             onMouseEnter={e => (e.target.style.color = c.accent)}
             onMouseLeave={e => (e.target.style.color = c.textMuted)}
+            onClick={() => trackEvent('nav_contact_click')}
           >
             get in touch
           </a>
 
           <button
-            onClick={toggleTheme}
+            onClick={() => { toggleTheme(); trackEvent('theme_toggle', { theme: theme === 'dark' ? 'light' : 'dark' }) }}
             aria-label="Toggle theme"
             style={{ background: 'none', border: `1px solid ${c.border}`, borderRadius: 8, padding: '6px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'border-color 0.2s' }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = c.accent)}
@@ -475,7 +495,11 @@ function ProductCard({ product, c }) {
   }
 
   return (
-    <Link to={`/product/${product.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+    <Link
+      to={`/product/${product.slug}`}
+      style={{ textDecoration: 'none', display: 'block' }}
+      onClick={() => trackEvent('product_card_click', { product_name: product.name, product_slug: product.slug })}
+    >
       <div
         style={{
           height: '100%',
@@ -526,6 +550,7 @@ function IdeaCard({ c }) {
     <a
       href="mailto:rockeykotwal1995@gmail.com?subject=Product Idea&body=Hey Rockey, here's an idea I think you should build:"
       style={{ textDecoration: 'none', display: 'block' }}
+      onClick={() => trackEvent('idea_card_click')}
     >
       <div
         style={{
