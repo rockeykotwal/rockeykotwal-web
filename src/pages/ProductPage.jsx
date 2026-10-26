@@ -81,16 +81,30 @@ export default function ProductPage() {
             Coming Soon
           </span>
         ) : (
-          <a
-            href={product.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: c.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, textDecoration: 'none', letterSpacing: '-0.01em', transition: 'background 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = c.accentHover)}
-            onMouseLeave={e => (e.currentTarget.style.background = c.accent)}
-          >
-            Launch App ↗
-          </a>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <a
+              href={product.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: c.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, textDecoration: 'none', letterSpacing: '-0.01em', transition: 'background 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = c.accentHover)}
+              onMouseLeave={e => (e.currentTarget.style.background = c.accent)}
+            >
+              Launch App ↗
+            </a>
+            {product.github && (
+              <a
+                href={product.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'transparent', color: c.textSec, fontWeight: 600, fontSize: 14, padding: '14px 28px', borderRadius: 100, textDecoration: 'none', border: `1px solid ${c.border}`, transition: 'border-color 0.2s, color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = c.accent; e.currentTarget.style.color = c.accent }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = c.border; e.currentTarget.style.color = c.textSec }}
+              >
+                GitHub ↗
+              </a>
+            )}
+          </div>
         )}
       </section>
 
