@@ -1,7 +1,9 @@
 import { useParams, Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { products } from '../data/products'
 import { useTheme } from '../context/ThemeContext'
 import { themes } from '../styles/themes'
+import { trackEvent } from '../analytics.js'
 
 function IconSun({ size = 18, color }) {
   return (
@@ -29,6 +31,37 @@ export default function ProductPage() {
   const c = themes[theme]
   const product = products.find((p) => p.slug === slug)
 
+  useEffect(() => {
+    if (!product) return
+    trackEvent('product_page_view', { product_name: product.name, product_slug: product.slug })
+  }, [product?.slug])
+
+  useEffect(() => {
+    if (!product) return
+    const milestones = new Set()
+    const onScroll = () => {
+      const scrolled = window.scrollY + window.innerHeight
+      const total = document.documentElement.scrollHeight
+      const pct = Math.round((scrolled / total) * 100)
+      for (const depth of [25, 50, 75, 100]) {
+        if (pct >= depth && !milestones.has(depth)) {
+          milestones.add(depth)
+          trackEvent('scroll_depth', { depth, page: 'product', product_name: product.name })
+        }
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [product?.slug])
+
+  useEffect(() => {
+    if (!product) return
+    const timers = [30, 60, 120].map(seconds =>
+      setTimeout(() => trackEvent('time_on_page', { seconds, page: 'product', product_name: product.name }), seconds * 1000)
+    )
+    return () => timers.forEach(clearTimeout)
+  }, [product?.slug])
+
   if (!product) {
     return (
       <div style={{ minHeight: '100vh', background: c.bg, color: c.text, fontFamily: 'Inter, system-ui, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -50,11 +83,12 @@ export default function ProductPage() {
           style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: c.textMuted, textDecoration: 'none', letterSpacing: '0.2em', textTransform: 'uppercase', transition: 'color 0.2s' }}
           onMouseEnter={e => (e.target.style.color = c.accent)}
           onMouseLeave={e => (e.target.style.color = c.textMuted)}
+          onClick={() => trackEvent('back_home_click', { source: 'nav', product_name: product?.name })}
         >
           ← RK
         </Link>
         <button
-          onClick={toggleTheme}
+          onClick={() => { toggleTheme(); trackEvent('theme_toggle', { theme: theme === 'dark' ? 'light' : 'dark' }) }}
           aria-label="Toggle theme"
           style={{ background: 'none', border: `1px solid ${c.border}`, borderRadius: 8, padding: '6px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
@@ -89,6 +123,7 @@ export default function ProductPage() {
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: c.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, textDecoration: 'none', letterSpacing: '-0.01em', transition: 'background 0.2s' }}
               onMouseEnter={e => (e.currentTarget.style.background = c.accentHover)}
               onMouseLeave={e => (e.currentTarget.style.background = c.accent)}
+              onClick={() => trackEvent('product_launch_click', { product_name: product.name, product_slug: product.slug })}
             >
               Launch App ↗
             </a>
@@ -100,6 +135,7 @@ export default function ProductPage() {
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'transparent', color: c.textSec, fontWeight: 600, fontSize: 14, padding: '14px 28px', borderRadius: 100, textDecoration: 'none', border: `1px solid ${c.border}`, transition: 'border-color 0.2s, color 0.2s' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = c.accent; e.currentTarget.style.color = c.accent }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = c.border; e.currentTarget.style.color = c.textSec }}
+                onClick={() => trackEvent('product_github_click', { product_name: product.name, product_slug: product.slug })}
               >
                 GitHub ↗
               </a>
@@ -135,6 +171,7 @@ export default function ProductPage() {
           style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: c.textMuted, textDecoration: 'none', letterSpacing: '0.15em', textTransform: 'uppercase', transition: 'color 0.2s' }}
           onMouseEnter={e => (e.target.style.color = c.accent)}
           onMouseLeave={e => (e.target.style.color = c.textMuted)}
+          onClick={() => trackEvent('back_home_click', { source: 'footer', product_name: product?.name })}
         >
           ← back to all products
         </Link>
