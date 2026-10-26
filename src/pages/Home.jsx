@@ -209,12 +209,19 @@ export default function Home() {
       for (const depth of [25, 50, 75, 100]) {
         if (pct >= depth && !milestones.has(depth)) {
           milestones.add(depth)
-          trackEvent('scroll_depth', { depth })
+          trackEvent('scroll_depth', { depth, page: 'home' })
         }
       }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const timers = [30, 60, 120].map(seconds =>
+      setTimeout(() => trackEvent('time_on_page', { seconds, page: 'home' }), seconds * 1000)
+    )
+    return () => timers.forEach(clearTimeout)
   }, [])
 
   return (

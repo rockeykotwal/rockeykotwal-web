@@ -1,6 +1,14 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useLocation, Link } from 'react-router-dom'
+import { trackEvent } from '../analytics.js'
 
 export default function NotFound() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    trackEvent('404_hit', { path: pathname })
+  }, [pathname])
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
       <div className="text-center">
