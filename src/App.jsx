@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext'
 import Home from './pages/Home'
 import ProductPage from './pages/ProductPage'
 import NotFound from './pages/NotFound'
+import { trackPageView } from './analytics.js'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -13,10 +14,19 @@ function ScrollToTop() {
   return null
 }
 
+function Analytics() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    trackPageView(pathname)
+  }, [pathname])
+  return null
+}
+
 export default function App() {
   return (
     <ThemeProvider>
       <ScrollToTop />
+      <Analytics />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/product/:slug" element={<ProductPage />} />
