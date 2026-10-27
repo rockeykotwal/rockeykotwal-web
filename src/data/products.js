@@ -28,26 +28,27 @@ export const products = [
   {
     slug: 'backend-friend',
     name: 'Backend Friend',
-    tagline: 'ESLint for your database queries',
+    tagline: 'Catch what\'s killing your database before it kills your app',
     description:
-      'An AI-powered ORM query analyzer that catches N+1 problems, missing indexes, and overfetching in your Prisma, TypeORM, and Sequelize code — and hands you back the fixed ORM code and migration script, ready to paste.',
+      'An AI-powered ORM query analyzer that finds N+1 problems, missing indexes, and overfetching across every major backend language and database — and gives you back the fixed ORM code and migration script, ready to paste. Not a SQL explanation. The actual fix.',
     url: 'https://backend-friend.rockeykotwal.in',
     github: 'https://github.com/rockeykotwal/backend-friend',
+    aiTag: 'AI + Agentic',
     features: [
       {
-        title: 'N+1 detection & auto-fix',
+        title: 'ORM-level fix, not just a SQL/No SQL diagnosis',
         description:
-          'Paste your ORM query and schema — get a severity badge, the exact SQL being generated, and a corrected ORM query with a migration script. No translation step.',
+          'Paste your ORM query and schema — get a severity badge, the exact SQL being generated under the hood, corrected ORM code in your language, and a migration script if indexes are needed. No manual translation from SQL back to your codebase.',
       },
       {
         title: 'Agentic codebase scan',
         description:
-          'Point it at your source files. The agent finds every ORM query, analyses them all, and returns a ranked list of issues — critical first.',
+          'Paste a GitHub repo URL or upload a local folder — the agent scans every file, finds every ORM query, analyses them all, and returns a ranked issue list with the most critical problems first.',
       },
       {
         title: 'Voice input + execution plan visual',
         description:
-          'Describe your query problem out loud via voice transcription, or generate a before/after execution plan diagram to see exactly what changes.',
+          'Describe your query problem out loud via voice transcription, or generate a before/after execution plan diagram to see exactly what the fix changes at the database level.',
       },
     ],
   },
@@ -59,6 +60,7 @@ export const products = [
       'A real-time status dashboard that monitors developer tools like GitHub, Stripe, Cloudflare and Vercel, plus any custom links you add. Checks every few minutes, keeps full incident history, and generates AI summaries of ongoing outages.',
     url: 'https://upcheck.rockeykotwal.in',
     github: 'https://github.com/rockeykotwal/upcheck-web',
+    aiTag: 'AI-powered',
     features: [
       {
         title: 'Live monitoring for any link',
@@ -85,6 +87,7 @@ export const products = [
       'A web-based platform for building and running autonomous AI agents. Define goals, let agents browse, reason, and act — without babysitting every step.',
     url: null,
     comingSoon: true,
+    aiTag: 'Agentic AI',
     features: [
       {
         title: 'Goal-driven web agents',
