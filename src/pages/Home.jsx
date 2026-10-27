@@ -463,6 +463,23 @@ function ProductCard({ product, c }) {
             coming soon
           </span>
         </div>
+        {product.aiTag && (
+          <div style={{ marginBottom: 12 }}>
+            <span style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 9,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: '#a78bfa',
+              border: '1px solid rgba(139,92,246,0.3)',
+              background: 'rgba(139,92,246,0.08)',
+              borderRadius: 100,
+              padding: '3px 10px',
+            }}>
+              ◈ {product.aiTag}
+            </span>
+          </div>
+        )}
         <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: c.accent, fontFamily: 'JetBrains Mono, monospace', marginBottom: 16 }}>
           {product.tagline}
         </p>
@@ -509,6 +526,23 @@ function ProductCard({ product, c }) {
           <h3 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em', color: c.text }}>{product.name}</h3>
           <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, color: hovered ? c.accent : c.textDim, transition: 'color 0.2s' }}>↗</span>
         </div>
+        {product.aiTag && (
+          <div style={{ marginBottom: 12 }}>
+            <span style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 9,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: '#a78bfa',
+              border: '1px solid rgba(139,92,246,0.3)',
+              background: 'rgba(139,92,246,0.08)',
+              borderRadius: 100,
+              padding: '3px 10px',
+            }}>
+              ◈ {product.aiTag}
+            </span>
+          </div>
+        )}
         <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: c.accent, fontFamily: 'JetBrains Mono, monospace', marginBottom: 16 }}>
           {product.tagline}
         </p>

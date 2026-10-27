@@ -104,6 +104,23 @@ export default function ProductPage() {
         <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 0.95, color: c.text, marginBottom: 20 }}>
           {product.name}
         </h1>
+        {product.aiTag && (
+          <div style={{ marginBottom: 20 }}>
+            <span style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 10,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: '#a78bfa',
+              border: '1px solid rgba(139,92,246,0.3)',
+              background: 'rgba(139,92,246,0.08)',
+              borderRadius: 100,
+              padding: '4px 14px',
+            }}>
+              ◈ {product.aiTag}
+            </span>
+          </div>
+        )}
         <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.25em', color: c.accent, fontFamily: 'JetBrains Mono, monospace', marginBottom: 24 }}>
           {product.tagline}
         </p>
