@@ -229,7 +229,7 @@ export default function Home() {
 
       {/* ── NAV ── */}
       <nav
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 64px', borderBottom: `1px solid ${c.borderSubtle}` }}
+        style={{ position: 'sticky', top: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 64px', borderBottom: `1px solid ${c.borderSubtle}`, background: c.bg, backdropFilter: 'blur(12px)' }}
       >
         <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.04em', color: c.text }}>RK</span>
 
@@ -422,6 +422,18 @@ export default function Home() {
         </div>
         <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: c.textDim, letterSpacing: '0.1em' }}>
           © {new Date().getFullYear()} ROCKEY KOTWAL
+        </p>
+        <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, letterSpacing: '0.1em', marginTop: 8 }}>
+          <a
+            href="https://tipjar.rockeykotwal.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: c.textMuted, textDecoration: 'underline', cursor: 'pointer', transition: 'color 0.2s' }}
+            onMouseEnter={e => (e.target.style.color = c.accent)}
+            onMouseLeave={e => (e.target.style.color = c.textMuted)}
+          >
+            Nothing here? throw a tea at me anyway 🍵
+          </a>
         </p>
       </footer>
 
