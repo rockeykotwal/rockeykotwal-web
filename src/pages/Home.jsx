@@ -98,6 +98,26 @@ const SOCIAL = [
   { label: 'YouTube', href: 'https://www.youtube.com/@Rockey_And_Simran', Icon: IconYouTube },
 ]
 
+function NavSocialIcon({ label, href, Icon, c }) {
+  const [hovered, setHovered] = useState(false)
+  const color = hovered ? c.accent : c.textMuted
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      onClick={() => trackEvent('social_click', { platform: label.toLowerCase(), location: 'header' })}
+      style={{ display: 'flex', alignItems: 'center', color, transition: 'color 0.2s', textDecoration: 'none' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <Icon size={17} color={color} />
+    </a>
+  )
+}
+
 function SocialLink({ label, href, Icon, c }) {
   const [hovered, setHovered] = useState(false)
   const color = hovered ? c.accent : c.textMuted
@@ -233,7 +253,7 @@ export default function Home() {
       >
         <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.04em', color: c.text }}>RK</span>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <a
             href="mailto:rockeykotwal1995@gmail.com"
             style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: c.textMuted, textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace', transition: 'color 0.2s' }}
@@ -243,6 +263,14 @@ export default function Home() {
           >
             get in touch
           </a>
+
+          <div style={{ width: 1, height: 16, background: c.borderSubtle }} />
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            {SOCIAL.map(({ label, href, Icon }) => (
+              <NavSocialIcon key={label} label={label} href={href} Icon={Icon} c={c} />
+            ))}
+          </div>
 
           <button
             onClick={() => { toggleTheme(); trackEvent('theme_toggle', { theme: theme === 'dark' ? 'light' : 'dark' }) }}
@@ -415,11 +443,6 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer style={{ borderTop: `1px solid ${c.borderSubtle}`, padding: '48px 32px 80px', textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 32, marginBottom: 32 }}>
-          {SOCIAL.map(({ label, href, Icon }) => (
-            <SocialLink key={label} label={label} href={href} Icon={Icon} c={c} />
-          ))}
-        </div>
         <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: c.textDim, letterSpacing: '0.1em' }}>
           © {new Date().getFullYear()} ROCKEY KOTWAL
         </p>
