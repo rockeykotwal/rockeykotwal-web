@@ -219,6 +219,13 @@ import { trackEvent } from '../analytics.js'
 export default function Home() {
   const { theme, toggleTheme } = useTheme()
   const c = themes[theme]
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     const milestones = new Set()
@@ -249,24 +256,48 @@ export default function Home() {
 
       {/* ── NAV ── */}
       <nav
-        style={{ position: 'sticky', top: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 64px', borderBottom: `1px solid ${c.borderSubtle}`, background: c.bg, backdropFilter: 'blur(12px)' }}
+        style={{ position: 'sticky', top: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '16px 20px' : '24px 64px', borderBottom: `1px solid ${c.borderSubtle}`, background: c.bg, backdropFilter: 'blur(12px)' }}
       >
-        <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.04em', color: c.text }}>RK</span>
+        {/* Left: RK — on mobile also shows pipe + email icon */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.04em', color: c.text }}>RK</span>
+          {isMobile && (
+            <>
+              <div style={{ width: 1, height: 16, background: c.borderSubtle }} />
+              <a
+                href="mailto:rockeykotwal1995@gmail.com"
+                aria-label="Email me"
+                onClick={() => trackEvent('nav_contact_click')}
+                style={{ display: 'flex', alignItems: 'center', color: c.textMuted, textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = c.accent)}
+                onMouseLeave={e => (e.currentTarget.style.color = c.textMuted)}
+              >
+                <svg width={17} height={17} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+              </a>
+            </>
+          )}
+        </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-          <a
-            href="mailto:rockeykotwal1995@gmail.com"
-            style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: c.textMuted, textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.target.style.color = c.accent)}
-            onMouseLeave={e => (e.target.style.color = c.textMuted)}
-            onClick={() => trackEvent('nav_contact_click')}
-          >
-            get in touch
-          </a>
+          {!isMobile && (
+            <>
+              <a
+                href="mailto:rockeykotwal1995@gmail.com"
+                style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: c.textMuted, textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace', transition: 'color 0.2s' }}
+                onMouseEnter={e => (e.target.style.color = c.accent)}
+                onMouseLeave={e => (e.target.style.color = c.textMuted)}
+                onClick={() => trackEvent('nav_contact_click')}
+              >
+                get in touch
+              </a>
+              <div style={{ width: 1, height: 16, background: c.borderSubtle }} />
+            </>
+          )}
 
-          <div style={{ width: 1, height: 16, background: c.borderSubtle }} />
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 14 }}>
             {SOCIAL.map(({ label, href, Icon }) => (
               <NavSocialIcon key={label} label={label} href={href} Icon={Icon} c={c} />
             ))}
