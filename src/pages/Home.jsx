@@ -89,7 +89,7 @@ function TopoBg({ c }) {
   )
 }
 
-// ── Social Link ────────────────────────────────────────────────────────────
+// ── Social Links ───────────────────────────────────────────────────────────
 
 const SOCIAL = [
   { label: 'GitHub', href: 'https://github.com/rockeykotwal', Icon: IconGitHub },
@@ -114,36 +114,6 @@ function NavSocialIcon({ label, href, Icon, c }) {
       onMouseLeave={() => setHovered(false)}
     >
       <Icon size={17} color={color} />
-    </a>
-  )
-}
-
-function SocialLink({ label, href, Icon, c }) {
-  const [hovered, setHovered] = useState(false)
-  const color = hovered ? c.accent : c.textMuted
-
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={() => trackEvent('social_click', { platform: label.toLowerCase() })}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        textDecoration: 'none',
-        color,
-        fontSize: 13,
-        fontFamily: 'JetBrains Mono, monospace',
-        letterSpacing: '0.1em',
-        transition: 'color 0.2s',
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <Icon size={16} color={color} />
-      {label}
     </a>
   )
 }
@@ -658,6 +628,7 @@ function ProductCard({ product, c }) {
 // ── Idea / Work Card ────────────────────────────────────────────────────────
 
 const CONTACT_EMAIL = 'rockeykotwal1995@gmail.com'
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY
 const ENGAGEMENTS = ['Full-time', 'Contract', 'Part-time']
 
 function IdeaCard({ c }) {
@@ -665,14 +636,66 @@ function IdeaCard({ c }) {
   const [rate, setRate] = useState('')
   const [engagement, setEngagement] = useState('Contract')
   const [period, setPeriod] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
 
   const isWork = mode === 'work'
 
-  const href = isWork
-    ? `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Work opportunity — ${engagement}`)}&body=${encodeURIComponent(
-        `Hey Rockey,\n\nI've got some work for you.\n\nEngagement: ${engagement}\nHourly rate: ${rate ? `$${rate}/hr` : '(open to discuss)'}\nPeriod of work: ${period || '(open to discuss)'}\n\nAbout the work:\n`
-      )}`
-    : `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Product Idea')}&body=${encodeURIComponent("Hey Rockey, here's an idea I think you should build:")}`
+  // After a successful send, show the confirmation briefly, then allow another submission.
+  useEffect(() => {
+    if (status !== 'sent') return
+    const t = setTimeout(() => setStatus('idle'), 3000)
+    return () => clearTimeout(t)
+  }, [status])
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (status === 'sending') return
+    const form = e.currentTarget
+    if (form.botcheck?.checked) return // honeypot: bots tick hidden checkbox
+
+    setStatus('sending')
+    trackEvent(isWork ? 'work_card_click' : 'idea_card_click', isWork ? { engagement, rate, period } : undefined)
+
+    const payload = {
+      access_key: WEB3FORMS_KEY,
+      subject: isWork ? `Work opportunity — ${engagement}` : 'Product Idea',
+      from_name: 'rockeykotwal.com',
+      name,
+      email,
+      ...(isWork && {
+        engagement,
+        hourly_rate: rate ? `$${rate}/hr` : '(open to discuss)',
+        period_of_work: period || '(open to discuss)',
+      }),
+      message,
+    }
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) throw new Error(data.message || 'Submit failed')
+      setStatus('sent')
+      setName('')
+      setEmail('')
+      setMessage('')
+      setRate('')
+      setPeriod('')
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  function switchMode(next) {
+    setMode(next)
+    if (status !== 'sending') setStatus('idle')
+  }
 
   const mono = 'JetBrains Mono, monospace'
   const tabStyle = (active) => ({
@@ -720,10 +743,10 @@ function IdeaCard({ c }) {
       <span style={{ fontFamily: mono, fontSize: 32, color: c.accent, display: 'block', marginBottom: 16 }}>✦</span>
 
       <div role="tablist" style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-        <button type="button" role="tab" aria-selected={!isWork} style={tabStyle(!isWork)} onClick={() => setMode('idea')}>
+        <button type="button" role="tab" aria-selected={!isWork} style={tabStyle(!isWork)} onClick={() => switchMode('idea')}>
           Got an idea?
         </button>
-        <button type="button" role="tab" aria-selected={isWork} style={tabStyle(isWork)} onClick={() => setMode('work')}>
+        <button type="button" role="tab" aria-selected={isWork} style={tabStyle(isWork)} onClick={() => switchMode('work')}>
           Got work for me?
         </button>
       </div>
@@ -737,8 +760,22 @@ function IdeaCard({ c }) {
           : "If there's something you'd love to see built a tool, a fix, a product pitch it. I read every message."}
       </p>
 
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
+      <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" style={{ display: 'none' }} />
+
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+        <label style={{ flex: '1 1 120px' }}>
+          <span style={labelStyle}>Your name</span>
+          <input type="text" required autoComplete="name" placeholder="Jane Doe" value={name} onChange={(e) => setName(e.target.value)} style={fieldStyle} />
+        </label>
+        <label style={{ flex: '1 1 120px' }}>
+          <span style={labelStyle}>Your email</span>
+          <input type="email" required autoComplete="email" placeholder="jane@company.com" value={email} onChange={(e) => setEmail(e.target.value)} style={fieldStyle} />
+        </label>
+      </div>
+
       {isWork && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 12 }}>
           <div>
             <span style={labelStyle}>Type of work</span>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -762,15 +799,42 @@ function IdeaCard({ c }) {
         </div>
       )}
 
+      <label style={{ marginBottom: 20 }}>
+        <span style={labelStyle}>{isWork ? 'About the work' : 'Your idea'}</span>
+        <textarea
+          required
+          rows={4}
+          placeholder={isWork ? 'Team, stack, what you need built…' : "Here's an idea I think you should build…"}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          style={{ ...fieldStyle, resize: 'vertical', lineHeight: 1.5 }}
+        />
+      </label>
+
       <div style={{ borderTop: `1px solid ${c.borderSubtle}`, paddingTop: 20 }}>
-        <a
-          href={href}
-          onClick={() => trackEvent(isWork ? 'work_card_click' : 'idea_card_click', isWork ? { engagement, rate, period } : undefined)}
-          style={{ fontSize: 11, color: c.accent, fontFamily: mono, letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none' }}
-        >
-          {isWork ? 'send details ↗' : 'send idea ↗'}
-        </a>
+        {status === 'sent' ? (
+          <span role="status" style={{ fontSize: 11, color: c.accent, fontFamily: mono, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            ✓ sent — I'll get back to you soon
+          </span>
+        ) : (
+          <>
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              style={{ background: 'none', border: 'none', padding: 0, cursor: status === 'sending' ? 'wait' : 'pointer', opacity: status === 'sending' ? 0.6 : 1, fontSize: 11, color: c.accent, fontFamily: mono, letterSpacing: '0.15em', textTransform: 'uppercase' }}
+            >
+              {status === 'sending' ? 'sending…' : isWork ? 'send details ↗' : 'send idea ↗'}
+            </button>
+            {status === 'error' && (
+              <p role="alert" style={{ marginTop: 10, fontSize: 12, color: c.textSec, fontFamily: mono }}>
+                Couldn't send. Try again or email{' '}
+                <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: c.accent }}>{CONTACT_EMAIL}</a>
+              </p>
+            )}
+          </>
+        )}
       </div>
+      </form>
     </div>
   )
 }
