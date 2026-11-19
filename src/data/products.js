@@ -1,27 +1,49 @@
 export const products = [
   {
-    slug: 'tipjar',
-    name: 'TipJar',
-    tagline: 'One-tap UPI tips for my AI coding subscription',
+    slug: 'creatoraudit',
+    name: 'CreatorAudit',
+    tagline: 'Know what any creator is actually worth',
     description:
-      'A one-page site where supporters can send small tips to help fund my AI coding assistant subscription. Pick an amount, scan a UPI QR code or tap pay — done. A live progress bar tracks the month\'s $20 goal.',
-    url: 'https://tipjar.rockeykotwal.in',
-    github: 'https://github.com/rockeykotwal/tipjar',
+      'Audit any YouTube or Instagram creator in seconds engagement, audience quality, fake follower signals and a fair rate range, all from official APIs. Creators get a shareable media kit with a data-backed rate card. First audit is free.',
+    url: 'https://creatoraudit.app',
+    aiTag: 'AI-powered',
+    tools: [
+      {
+        name: 'Engagement Rate Calculator',
+        description: 'See any YouTube channel\'s engagement rate and trend, compared with channels of a similar size.',
+        url: 'https://creatoraudit.app/tools/youtube-engagement-rate-calculator',
+      },
+      {
+        name: 'Sponsorship Rate Calculator',
+        description: 'Find out what to charge for a sponsored video based on subscribers, engagement and niche.',
+        url: 'https://creatoraudit.app/tools/youtube-rate-calculator',
+      },
+      {
+        name: 'Audience Quality Checker',
+        description: 'Spot unusual engagement, subscriber spikes and low comment ratios using official YouTube data.',
+        url: 'https://creatoraudit.app/tools/youtube-audience-quality-checker',
+      },
+      {
+        name: 'Media Kit Generator',
+        description: 'Enter a channel and get a shareable kit with subscribers, average views, engagement and rate range.',
+        url: 'https://creatoraudit.app/tools/free-youtube-media-kit-generator',
+      },
+    ],
     features: [
       {
-        title: 'One-tap UPI payments',
+        title: 'Influencer audits from official APIs',
         description:
-          'Preset amounts ($1, $3, $5, $10) or custom — generates a QR code for GPay, PhonePe, Paytm or any UPI app, with rupee equivalent shown automatically.',
+          'Live data from the YouTube Data API and Instagram Business Discovery API engagement scored against the creator\'s tier, posting consistency, and audience quality. No scrapers, no stale databases.',
       },
       {
-        title: 'Live progress bar',
+        title: 'Fair rate ranges',
         description:
-          'Shows how close the monthly $20 goal is in real time so every supporter knows their tip counts.',
+          'A CPM-anchored rate range adjusted for niche, platform and format dedicated video, integration, Shorts/Reels or Stories — so brands and creators negotiate from the same numbers.',
       },
       {
-        title: 'Auto rupee conversion',
+        title: 'Media kits with a Verified Owner badge',
         description:
-          'Dollar amounts convert to INR automatically — no mental math, no friction.',
+          'Creators generate a shareable media kit in one click. Connect YouTube via OAuth to earn a Verified Owner badge and share real analytics like watch time and audience countries.',
       },
     ],
   },
@@ -30,7 +52,7 @@ export const products = [
     name: 'Backend Friend',
     tagline: 'Catch what\'s killing your database before it kills your app',
     description:
-      'An AI-powered ORM query analyzer that finds N+1 problems, missing indexes, and overfetching across every major backend language and database — and gives you back the fixed ORM code and migration script, ready to paste. Not a SQL explanation. The actual fix.',
+      'An AI-powered ORM query analyzer that finds N+1 problems, missing indexes, and overfetching across every major backend language and database and gives you back the fixed ORM code and migration script, ready to paste. Not a SQL explanation. The actual fix.',
     url: 'https://backend-friend.rockeykotwal.in',
     github: 'https://github.com/rockeykotwal/backend-friend',
     aiTag: 'AI + Agentic',
@@ -50,7 +72,60 @@ export const products = [
         description:
           'Describe your query problem out loud via voice transcription, or generate a before/after execution plan diagram to see exactly what the fix changes at the database level.',
       },
+    ]
+  },
+  {
+    slug: 'bot-workflows',
+    name: 'Bot Workflows',
+    tagline: 'AI pull request reviews in under 2 minutes of setup',
+    description:
+      'A reusable GitHub Actions workflow that reviews every pull request with AI. Add one YAML file and a free Gemini key the bot reads the diff, detects your stack, and posts a summary plus inline fix suggestions. Never blocks a PR on failure.',
+    url: 'https://github.com/rockeykotwal/bot-workflows',
+    launchLabel: 'View on GitHub',
+    aiTag: 'AI-powered',
+    features: [
+      {
+        title: 'Drop-in GitHub Actions workflow',
+        description:
+          'No fork, no code, no infrastructure. Your repo calls the shared workflow directly — open a PR and the review lands within about a minute.',
+      },
+      {
+        title: 'Bring your own model',
+        description:
+          'Gemini (free), OpenAI, Anthropic, or a self-hosted Ollama server. Silently skips if the provider is down or rate-limited.',
+      },
+      {
+        title: 'Knows your project rules',
+        description:
+          'Add a PROJECT_CONTEXT.md and the bot applies your architecture patterns and standards. Optionally block merges on high-severity findings.',
+      },
     ],
+  },
+  {
+    slug: 'tipjar',
+    name: 'TipJar',
+    tagline: 'One-tap UPI tips for my AI coding subscription',
+    description:
+      'A one-page site where supporters can send small tips to help fund my AI coding assistant subscription. Pick an amount, scan a UPI QR code or tap pay done. A live progress bar tracks the month\'s $20 goal.',
+    url: 'https://tipjar.rockeykotwal.in',
+    github: 'https://github.com/rockeykotwal/tipjar',
+    features: [
+      {
+        title: 'One-tap UPI payments',
+        description:
+          'Preset amounts ($1, $3, $5, $10) or custom — generates a QR code for GPay, PhonePe, Paytm or any UPI app, with rupee equivalent shown automatically.',
+      },
+      {
+        title: 'Live progress bar',
+        description:
+          'Shows how close the monthly $20 goal is in real time so every supporter knows their tip counts.',
+      },
+      {
+        title: 'Auto rupee conversion',
+        description:
+          'Dollar amounts convert to INR automatically — no mental math, no friction.',
+      },
+    ]
   },
   {
     slug: 'upcheck',
@@ -60,6 +135,7 @@ export const products = [
       'A real-time status dashboard that monitors developer tools like GitHub, Stripe, Cloudflare and Vercel, plus any custom links you add. Checks every few minutes, keeps full incident history, and generates AI summaries of ongoing outages.',
     url: 'https://upcheck.rockeykotwal.in',
     github: 'https://github.com/rockeykotwal/upcheck-web',
+    deploymentPaused: true,
     aiTag: 'AI-powered',
     features: [
       {
@@ -76,33 +152,6 @@ export const products = [
         title: 'Full incident history',
         description:
           'Every status change is logged so you can spot patterns and report to your team with confidence.',
-      },
-    ],
-  },
-  {
-    slug: 'agentic-ai',
-    name: 'Agentic AI',
-    tagline: 'Web-based autonomous AI agents',
-    description:
-      'A web-based platform for building and running autonomous AI agents. Define goals, let agents browse, reason, and act — without babysitting every step.',
-    url: null,
-    comingSoon: true,
-    aiTag: 'Agentic AI',
-    features: [
-      {
-        title: 'Goal-driven web agents',
-        description:
-          'Describe an outcome in plain language — the agent plans and executes multi-step tasks across the web autonomously.',
-      },
-      {
-        title: 'Live agent canvas',
-        description:
-          'Watch agents think and act in real time on a visual canvas. Inspect every decision, tool call, and result as it happens.',
-      },
-      {
-        title: 'No-code + code',
-        description:
-          'Build workflows visually or drop into code at any node — designed for engineers who want both flexibility and speed.',
       },
     ],
   },
