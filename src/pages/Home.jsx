@@ -590,7 +590,23 @@ function ProductCard({ product, c }) {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
           <h3 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em', color: c.text }}>{product.name}</h3>
-          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, color: hovered ? c.accent : c.textDim, transition: 'color 0.2s' }}>↗</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {product.deploymentPaused && (
+              <span style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 9,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: c.textMuted,
+                border: `1px dashed ${c.border}`,
+                borderRadius: 100,
+                padding: '3px 10px',
+              }}>
+                paused
+              </span>
+            )}
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 16, color: hovered ? c.accent : c.textDim, transition: 'color 0.2s' }}>↗</span>
+          </div>
         </div>
         {product.aiTag && (
           <div style={{ marginBottom: 12 }}>
@@ -622,6 +638,12 @@ function ProductCard({ product, c }) {
               <span>{f.title}</span>
             </li>
           ))}
+          {product.tools?.length > 0 && (
+            <li style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: c.accent }}>
+              <span style={{ marginTop: 1, flexShrink: 0 }}>+</span>
+              <span>{product.tools.length} free tools, no sign-up</span>
+            </li>
+          )}
         </ul>
         <div style={{ borderTop: `1px solid ${c.borderSubtle}`, marginTop: 28, paddingTop: 20 }}>
           <span style={{ fontSize: 11, color: c.textMuted, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
@@ -633,56 +655,122 @@ function ProductCard({ product, c }) {
   )
 }
 
-// ── Idea Card ───────────────────────────────────────────────────────────────
+// ── Idea / Work Card ────────────────────────────────────────────────────────
+
+const CONTACT_EMAIL = 'rockeykotwal1995@gmail.com'
+const ENGAGEMENTS = ['Full-time', 'Contract', 'Part-time']
 
 function IdeaCard({ c }) {
-  const [hovered, setHovered] = useState(false)
+  const [mode, setMode] = useState('idea')
+  const [rate, setRate] = useState('')
+  const [engagement, setEngagement] = useState('Contract')
+  const [period, setPeriod] = useState('')
+
+  const isWork = mode === 'work'
+
+  const href = isWork
+    ? `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Work opportunity — ${engagement}`)}&body=${encodeURIComponent(
+        `Hey Rockey,\n\nI've got some work for you.\n\nEngagement: ${engagement}\nHourly rate: ${rate ? `$${rate}/hr` : '(open to discuss)'}\nPeriod of work: ${period || '(open to discuss)'}\n\nAbout the work:\n`
+      )}`
+    : `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Product Idea')}&body=${encodeURIComponent("Hey Rockey, here's an idea I think you should build:")}`
+
+  const mono = 'JetBrains Mono, monospace'
+  const tabStyle = (active) => ({
+    flex: 1,
+    padding: '8px 10px',
+    borderRadius: 100,
+    border: `1px solid ${active ? c.accent : c.border}`,
+    background: active ? c.accent : 'transparent',
+    color: active ? '#fff' : c.textSec,
+    fontFamily: mono,
+    fontSize: 11,
+    letterSpacing: '0.05em',
+    cursor: 'pointer',
+    transition: 'background 0.2s, border-color 0.2s, color 0.2s',
+  })
+  const fieldStyle = {
+    width: '100%',
+    boxSizing: 'border-box',
+    padding: '10px 12px',
+    borderRadius: 10,
+    border: `1px solid ${c.border}`,
+    background: c.surface,
+    color: c.text,
+    fontFamily: mono,
+    fontSize: 12,
+    outline: 'none',
+  }
+  const labelStyle = { display: 'block', fontFamily: mono, fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: c.textMuted, marginBottom: 6 }
 
   return (
-    <a
-      href="mailto:rockeykotwal1995@gmail.com?subject=Product Idea&body=Hey Rockey, here's an idea I think you should build:"
-      style={{ textDecoration: 'none', display: 'block' }}
-      onClick={() => trackEvent('idea_card_click')}
+    <div
+      style={{
+        height: '100%',
+        padding: '32px',
+        background: 'transparent',
+        border: `1px dashed ${c.borderSubtle}`,
+        borderRadius: 20,
+        textAlign: 'left',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        minHeight: 220,
+      }}
     >
-      <div
-        style={{
-          height: '100%',
-          padding: '32px',
-          background: hovered ? c.surfaceHover : 'transparent',
-          border: `1px dashed ${hovered ? c.borderAccent : c.borderSubtle}`,
-          borderRadius: 20,
-          textAlign: 'left',
-          transition: 'background 0.2s, border-color 0.2s',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          minHeight: 220,
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        <span style={{
-          fontFamily: 'JetBrains Mono, monospace',
-          fontSize: 32,
-          color: hovered ? c.accent : c.textDim,
-          transition: 'color 0.2s',
-          display: 'block',
-          marginBottom: 16,
-        }}>
-          ✦
-        </span>
-        <h3 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', color: c.text, marginBottom: 10 }}>
+      <span style={{ fontFamily: mono, fontSize: 32, color: c.accent, display: 'block', marginBottom: 16 }}>✦</span>
+
+      <div role="tablist" style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+        <button type="button" role="tab" aria-selected={!isWork} style={tabStyle(!isWork)} onClick={() => setMode('idea')}>
           Got an idea?
-        </h3>
-        <p style={{ fontSize: 14, color: c.textSec, lineHeight: 1.6, marginBottom: 24 }}>
-          If there's something you'd love to see built — a tool, a fix, a product — pitch it. I read every message.
-        </p>
-        <div style={{ borderTop: `1px solid ${c.borderSubtle}`, paddingTop: 20 }}>
-          <span style={{ fontSize: 11, color: hovered ? c.accent : c.textMuted, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em', textTransform: 'uppercase', transition: 'color 0.2s' }}>
-            send idea ↗
-          </span>
-        </div>
+        </button>
+        <button type="button" role="tab" aria-selected={isWork} style={tabStyle(isWork)} onClick={() => setMode('work')}>
+          Got work for me?
+        </button>
       </div>
-    </a>
+
+      <h3 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', color: c.text, marginBottom: 10 }}>
+        {isWork ? 'Got some work for me?' : 'Got an idea?'}
+      </h3>
+      <p style={{ fontSize: 14, color: c.textSec, lineHeight: 1.6, marginBottom: 20 }}>
+        {isWork
+          ? 'Backend, payments, distributed systems tell me the shape of the role and I\'ll get back to you.'
+          : "If there's something you'd love to see built a tool, a fix, a product pitch it. I read every message."}
+      </p>
+
+      {isWork && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
+          <div>
+            <span style={labelStyle}>Type of work</span>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {ENGAGEMENTS.map((e) => (
+                <button key={e} type="button" style={{ ...tabStyle(engagement === e), flex: '1 1 auto' }} onClick={() => setEngagement(e)}>
+                  {e}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <label style={{ flex: '1 1 120px' }}>
+              <span style={labelStyle}>Hourly rate (USD)</span>
+              <input type="number" min="0" inputMode="numeric" placeholder="e.g. 60" value={rate} onChange={(e) => setRate(e.target.value)} style={fieldStyle} />
+            </label>
+            <label style={{ flex: '1 1 120px' }}>
+              <span style={labelStyle}>Period of work</span>
+              <input type="text" placeholder="e.g. 3 months" value={period} onChange={(e) => setPeriod(e.target.value)} style={fieldStyle} />
+            </label>
+          </div>
+        </div>
+      )}
+
+      <div style={{ borderTop: `1px solid ${c.borderSubtle}`, paddingTop: 20 }}>
+        <a
+          href={href}
+          onClick={() => trackEvent(isWork ? 'work_card_click' : 'idea_card_click', isWork ? { engagement, rate, period } : undefined)}
+          style={{ fontSize: 11, color: c.accent, fontFamily: mono, letterSpacing: '0.15em', textTransform: 'uppercase', textDecoration: 'none' }}
+        >
+          {isWork ? 'send details ↗' : 'send idea ↗'}
+        </a>
+      </div>
+    </div>
   )
 }

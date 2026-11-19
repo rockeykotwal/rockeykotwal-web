@@ -133,17 +133,26 @@ export default function ProductPage() {
           </span>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <a
-              href={product.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: c.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, textDecoration: 'none', letterSpacing: '-0.01em', transition: 'background 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.background = c.accentHover)}
-              onMouseLeave={e => (e.currentTarget.style.background = c.accent)}
-              onClick={() => trackEvent('product_launch_click', { product_name: product.name, product_slug: product.slug })}
-            >
-              Launch App ↗
-            </a>
+            {product.deploymentPaused ? (
+              <span
+                aria-disabled="true"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'transparent', color: c.textMuted, fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, border: `1px dashed ${c.border}`, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'not-allowed' }}
+              >
+                ⏸ Paused
+              </span>
+            ) : (
+              <a
+                href={product.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: c.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 32px', borderRadius: 100, textDecoration: 'none', letterSpacing: '-0.01em', transition: 'background 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.background = c.accentHover)}
+                onMouseLeave={e => (e.currentTarget.style.background = c.accent)}
+                onClick={() => trackEvent('product_launch_click', { product_name: product.name, product_slug: product.slug })}
+              >
+                {product.launchLabel || 'Launch App'} ↗
+              </a>
+            )}
             {product.github && (
               <a
                 href={product.github}
@@ -159,7 +168,58 @@ export default function ProductPage() {
             )}
           </div>
         )}
+        {product.deploymentPaused && (
+          <p style={{ marginTop: 20, fontSize: 13, color: c.textMuted, fontFamily: 'JetBrains Mono, monospace', lineHeight: 1.6 }}>
+            {product.name} is paused while I cover hosting costs. Want it back online?{' '}
+            <a
+              href="https://tipjar.rockeykotwal.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: c.accent, textDecoration: 'underline' }}
+              onClick={() => trackEvent('product_tip_click', { product_name: product.name, product_slug: product.slug })}
+            >
+              Throw a tea at me 🍵
+            </a>
+          </p>
+        )}
       </section>
+
+      {/* FREE TOOLS */}
+      {product.tools?.length > 0 && (
+        <section style={{ borderTop: `1px solid ${c.borderSubtle}`, padding: '80px 32px', textAlign: 'center' }}>
+          <div style={{ maxWidth: 960, margin: '0 auto' }}>
+            <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.3em', color: c.textMuted, fontFamily: 'JetBrains Mono, monospace', marginBottom: 12 }}>
+              // free tools
+            </p>
+            <p style={{ fontSize: 15, color: c.textSec, marginBottom: 40 }}>
+              Try it without signing up paste any YouTube channel.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: 16 }}>
+              {product.tools.map((tool) => (
+                <a
+                  key={tool.url}
+                  href={tool.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'block', padding: '24px 28px', background: c.surface, border: `1px solid ${c.border}`, borderRadius: 20, textAlign: 'left', textDecoration: 'none', transition: 'border-color 0.2s, background 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = c.borderAccent; e.currentTarget.style.background = c.surfaceHover }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = c.border; e.currentTarget.style.background = c.surface }}
+                  onClick={() => trackEvent('product_tool_click', { product_name: product.name, product_slug: product.slug, tool_name: tool.name })}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
+                    <h3 style={{ fontWeight: 600, fontSize: 16, color: c.text, letterSpacing: '-0.01em' }}>{tool.name}</h3>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, color: c.accent, flexShrink: 0 }}>↗</span>
+                  </div>
+                  <p style={{ color: c.textSec, fontSize: 14, lineHeight: 1.6, marginBottom: 14 }}>{tool.description}</p>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: c.green, border: `1px solid ${c.border}`, borderRadius: 100, padding: '3px 10px' }}>
+                    free · no sign-up
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* FEATURES */}
       {product.features.length > 0 && (
